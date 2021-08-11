@@ -1,0 +1,1 @@
+module "NintendoCenter/gameCollection"
