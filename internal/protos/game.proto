@@ -1,0 +1,31 @@
+syntax = 'proto3';
+
+option go_package = "internal/protos";
+
+message Game {
+  string Id = 1;
+  string Title = 2;
+  string Description = 3;
+  string ImageUrl = 4;
+  repeated Offer Offers = 5;
+}
+
+message Price {
+  float original = 1;
+  float discounted = 2;
+  float real = 3;
+}
+
+message Offer {
+  Shop shop = 1;
+  bool isDigital = 2;
+  bool isUsed = 3;
+  string link = 4;
+  Price price = 5;
+}
+
+enum Shop {
+  NINTENDO = 0;
+  SAVELA = 1;
+  INTEREST = 2;
+}

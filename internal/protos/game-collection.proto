@@ -4,6 +4,8 @@ option go_package = "internal/protos";
 
 package game_collection;
 
+import "internal/protos/game.proto";
+
 service GameCollection {
   rpc SaveGame(Game) returns (Game) {}
   rpc SaveOffer(SaveOfferRequest) returns (Offer) {}
@@ -11,38 +13,10 @@ service GameCollection {
 }
 
 message GetGameRequest {
-  string id = 1;
+  string Id = 1;
 }
 
 message SaveOfferRequest {
-  string gameId = 1;
-  Offer offer = 2;
-}
-
-message Game {
-  string id = 1;
-  string title = 2;
-  string description = 3;
-  string imageUrl = 4;
-  repeated Offer offers = 5;
-}
-
-message Price {
-  float original = 1;
-  float discounted = 2;
-  float real = 3;
-}
-
-message Offer {
-  Shop shop = 1;
-  bool isDigital = 2;
-  bool isUsed = 3;
-  string link = 4;
-  Price price = 5;
-}
-
-enum Shop {
-  NINTENDO = 0;
-  SAVELA = 1;
-  INTEREST = 2;
+  string GameId = 1;
+  Offer Offer = 2;
 }

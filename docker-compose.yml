@@ -1,0 +1,61 @@
+version: "3"
+
+services:
+  game_collection:
+    container_name: nc_game_collection
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - nc_mongo
+      - nc_elastic
+      - nc_nsqd
+    restart: unless-stopped
+    environment:
+      MONGO_CONNECTION: mongodb://mongo:27017/partendo
+      INTERVAL: 2
+      WORKERS: 2
+      ITEM_LIMIT: 40
+
+  nc_mongo:
+    container_name: nc_mongo
+    image: mongo:3.6.5
+    ports:
+      - 27017:27017
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+
+  nc_nsq_lookupd:
+    container_name: nc_nsq_lookupd
+    image: nsqio/nsq
+    command: /nsqlookupd
+    ports:
+      - 4160
+      - 4161
+
+  nc_nsqd:
+    container_name: nc_nsqd
+    image: nsqio/nsq
+    command: /nsqd --lookupd-tcp-address=nc_nsq_lookupd:4160
+    depends_on:
+      - nc_nsq_lookupd
+    ports:
+      - 4150
+      - 4151
+
+  nc_elastic:
+    container_name: nc_elastic
+    image: elasticsearch:7.14.0
+    environment:
+      - node.name=es01
+      - cluster.name=es-nc-cluster
+      - cluster.initial_master_nodes=es01
+    volumes:
+      - elastic_data:/usr/share/elasticsearch/data
+    ports:
+      - 9200
+
+volumes:
+  mongo_data:
+  elastic_data:
