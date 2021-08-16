@@ -7,6 +7,7 @@ import (
 	"NintendoCenter/game-collection/internal/providers/grpc_server"
 	"NintendoCenter/game-collection/internal/providers/logger"
 	"NintendoCenter/game-collection/internal/providers/mongo"
+	"NintendoCenter/game-collection/internal/queue/consumer"
 	"NintendoCenter/game-collection/internal/service"
 	"github.com/globalsign/mgo"
 	"go.uber.org/dig"
@@ -23,8 +24,8 @@ func BuildContainer() (*dig.Container, error) {
 		func (i *infrastructure.CollectionServer, cfg *config.Config) (*grpc_server.GrpcServer, error) {
 			return grpc_server.New(i, cfg)
 		},
-		func (l *zap.Logger) *service.GameService {
-			return service.NewGameService(l)
+		func (l *zap.Logger, m *manager.GameManager) *service.GameService {
+			return service.NewGameService(l, m)
 		},
 		func (m *service.GameService) *infrastructure.CollectionServer {
 			return infrastructure.NewCollectionServer(m)
@@ -34,6 +35,9 @@ func BuildContainer() (*dig.Container, error) {
 		},
 		func (db *mgo.Database) (*manager.GameManager, error) {
 			return manager.NewGameManager(db)
+		},
+		func (s *service.GameService, cfg *config.Config, l *zap.Logger) (*consumer.GameConsumer, error) {
+			return consumer.NewGameConsumer(cfg.GamesTopic, cfg.QueueAddr, s, l)
 		},
 		config.NewConfig,
 	}
