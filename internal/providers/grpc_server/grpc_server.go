@@ -38,3 +38,7 @@ func (s *GrpcServer) Run() error {
 	}
 	return s.gs.Serve(l)
 }
+
+func (s *GrpcServer)Stop() {
+	s.gs.Stop()
+}

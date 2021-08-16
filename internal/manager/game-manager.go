@@ -56,12 +56,12 @@ func (m *GameManager) UpdateGame(id string, game *protos.Game) error {
 		game.Offers = append(game.Offers, offer)
 	}
 
-	return m.collection.Update(bson.M{"_id": id}, game)
+	return m.collection.Update(bson.M{"id": id}, game)
 }
 
 func (m *GameManager) Find(id string) (*protos.Game, error) {
 	var game protos.Game
-	if err := m.collection.Find(bson.M{"_id": id}).One(&game); err != nil {
+	if err := m.collection.Find(bson.M{"id": id}).One(&game); err != nil {
 		return nil, err
 	}
 	return &game, nil
