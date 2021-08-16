@@ -29,3 +29,11 @@ func (m *GameService) SaveGame(game *protos.Game) error {
 	m.l.Info(fmt.Sprintf("game '%s' saved", game.Title))
 	return m.manager.SaveGame(game)
 }
+
+func (m *GameService) SearchGames(name string) ([]*protos.Game, error) {
+	return m.manager.SearchByName(name)
+}
+
+func (m *GameService) GetGame(id string) (*protos.Game, error) {
+	return m.manager.Find(id)
+}

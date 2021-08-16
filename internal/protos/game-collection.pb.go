@@ -20,6 +20,100 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type FindGameRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Title string `protobuf:"bytes,1,opt,name=Title,proto3" json:"Title,omitempty"`
+}
+
+func (x *FindGameRequest) Reset() {
+	*x = FindGameRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_internal_protos_game_collection_proto_msgTypes[0]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *FindGameRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FindGameRequest) ProtoMessage() {}
+
+func (x *FindGameRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_internal_protos_game_collection_proto_msgTypes[0]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FindGameRequest.ProtoReflect.Descriptor instead.
+func (*FindGameRequest) Descriptor() ([]byte, []int) {
+	return file_internal_protos_game_collection_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *FindGameRequest) GetTitle() string {
+	if x != nil {
+		return x.Title
+	}
+	return ""
+}
+
+type FindGameResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Games []*Game `protobuf:"bytes,1,rep,name=Games,proto3" json:"Games,omitempty"`
+}
+
+func (x *FindGameResponse) Reset() {
+	*x = FindGameResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_internal_protos_game_collection_proto_msgTypes[1]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *FindGameResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FindGameResponse) ProtoMessage() {}
+
+func (x *FindGameResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_internal_protos_game_collection_proto_msgTypes[1]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FindGameResponse.ProtoReflect.Descriptor instead.
+func (*FindGameResponse) Descriptor() ([]byte, []int) {
+	return file_internal_protos_game_collection_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *FindGameResponse) GetGames() []*Game {
+	if x != nil {
+		return x.Games
+	}
+	return nil
+}
+
 type GetGameRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -31,7 +125,7 @@ type GetGameRequest struct {
 func (x *GetGameRequest) Reset() {
 	*x = GetGameRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_internal_protos_game_collection_proto_msgTypes[0]
+		mi := &file_internal_protos_game_collection_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -44,7 +138,7 @@ func (x *GetGameRequest) String() string {
 func (*GetGameRequest) ProtoMessage() {}
 
 func (x *GetGameRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_protos_game_collection_proto_msgTypes[0]
+	mi := &file_internal_protos_game_collection_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -57,7 +151,7 @@ func (x *GetGameRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetGameRequest.ProtoReflect.Descriptor instead.
 func (*GetGameRequest) Descriptor() ([]byte, []int) {
-	return file_internal_protos_game_collection_proto_rawDescGZIP(), []int{0}
+	return file_internal_protos_game_collection_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *GetGameRequest) GetId() string {
@@ -65,61 +159,6 @@ func (x *GetGameRequest) GetId() string {
 		return x.Id
 	}
 	return ""
-}
-
-type SaveOfferRequest struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	GameId string `protobuf:"bytes,1,opt,name=GameId,proto3" json:"GameId,omitempty"`
-	Offer  *Offer `protobuf:"bytes,2,opt,name=Offer,proto3" json:"Offer,omitempty"`
-}
-
-func (x *SaveOfferRequest) Reset() {
-	*x = SaveOfferRequest{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_internal_protos_game_collection_proto_msgTypes[1]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *SaveOfferRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*SaveOfferRequest) ProtoMessage() {}
-
-func (x *SaveOfferRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_protos_game_collection_proto_msgTypes[1]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use SaveOfferRequest.ProtoReflect.Descriptor instead.
-func (*SaveOfferRequest) Descriptor() ([]byte, []int) {
-	return file_internal_protos_game_collection_proto_rawDescGZIP(), []int{1}
-}
-
-func (x *SaveOfferRequest) GetGameId() string {
-	if x != nil {
-		return x.GameId
-	}
-	return ""
-}
-
-func (x *SaveOfferRequest) GetOffer() *Offer {
-	if x != nil {
-		return x.Offer
-	}
-	return nil
 }
 
 var File_internal_protos_game_collection_proto protoreflect.FileDescriptor
@@ -130,25 +169,26 @@ var file_internal_protos_game_collection_proto_rawDesc = []byte{
 	0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x0f, 0x67, 0x61, 0x6d, 0x65, 0x5f, 0x63, 0x6f,
 	0x6c, 0x6c, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x1a, 0x1a, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x6e,
 	0x61, 0x6c, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2f, 0x67, 0x61, 0x6d, 0x65, 0x2e, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x22, 0x20, 0x0a, 0x0e, 0x47, 0x65, 0x74, 0x47, 0x61, 0x6d, 0x65, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x49, 0x64, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x02, 0x49, 0x64, 0x22, 0x48, 0x0a, 0x10, 0x53, 0x61, 0x76, 0x65, 0x4f, 0x66,
-	0x66, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x47, 0x61,
-	0x6d, 0x65, 0x49, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x47, 0x61, 0x6d, 0x65,
-	0x49, 0x64, 0x12, 0x1c, 0x0a, 0x05, 0x4f, 0x66, 0x66, 0x65, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28,
-	0x0b, 0x32, 0x06, 0x2e, 0x4f, 0x66, 0x66, 0x65, 0x72, 0x52, 0x05, 0x4f, 0x66, 0x66, 0x65, 0x72,
-	0x32, 0x9b, 0x01, 0x0a, 0x0e, 0x47, 0x61, 0x6d, 0x65, 0x43, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74,
-	0x69, 0x6f, 0x6e, 0x12, 0x1a, 0x0a, 0x08, 0x53, 0x61, 0x76, 0x65, 0x47, 0x61, 0x6d, 0x65, 0x12,
-	0x05, 0x2e, 0x47, 0x61, 0x6d, 0x65, 0x1a, 0x05, 0x2e, 0x47, 0x61, 0x6d, 0x65, 0x22, 0x00, 0x12,
-	0x38, 0x0a, 0x09, 0x53, 0x61, 0x76, 0x65, 0x4f, 0x66, 0x66, 0x65, 0x72, 0x12, 0x21, 0x2e, 0x67,
-	0x61, 0x6d, 0x65, 0x5f, 0x63, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x53,
-	0x61, 0x76, 0x65, 0x4f, 0x66, 0x66, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
-	0x06, 0x2e, 0x4f, 0x66, 0x66, 0x65, 0x72, 0x22, 0x00, 0x12, 0x33, 0x0a, 0x07, 0x47, 0x65, 0x74,
-	0x47, 0x61, 0x6d, 0x65, 0x12, 0x1f, 0x2e, 0x67, 0x61, 0x6d, 0x65, 0x5f, 0x63, 0x6f, 0x6c, 0x6c,
-	0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x47, 0x65, 0x74, 0x47, 0x61, 0x6d, 0x65, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x05, 0x2e, 0x47, 0x61, 0x6d, 0x65, 0x22, 0x00, 0x42, 0x11,
-	0x5a, 0x0f, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x6e, 0x61, 0x6c, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x72, 0x6f, 0x74, 0x6f, 0x22, 0x27, 0x0a, 0x0f, 0x46, 0x69, 0x6e, 0x64, 0x47, 0x61, 0x6d, 0x65,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x14, 0x0a, 0x05, 0x54, 0x69, 0x74, 0x6c, 0x65,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x54, 0x69, 0x74, 0x6c, 0x65, 0x22, 0x2f, 0x0a,
+	0x10, 0x46, 0x69, 0x6e, 0x64, 0x47, 0x61, 0x6d, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x12, 0x1b, 0x0a, 0x05, 0x47, 0x61, 0x6d, 0x65, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b,
+	0x32, 0x05, 0x2e, 0x47, 0x61, 0x6d, 0x65, 0x52, 0x05, 0x47, 0x61, 0x6d, 0x65, 0x73, 0x22, 0x20,
+	0x0a, 0x0e, 0x47, 0x65, 0x74, 0x47, 0x61, 0x6d, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x12, 0x0e, 0x0a, 0x02, 0x49, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x49, 0x64,
+	0x32, 0x98, 0x01, 0x0a, 0x0e, 0x47, 0x61, 0x6d, 0x65, 0x43, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74,
+	0x69, 0x6f, 0x6e, 0x12, 0x33, 0x0a, 0x07, 0x47, 0x65, 0x74, 0x47, 0x61, 0x6d, 0x65, 0x12, 0x1f,
+	0x2e, 0x67, 0x61, 0x6d, 0x65, 0x5f, 0x63, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e,
+	0x2e, 0x47, 0x65, 0x74, 0x47, 0x61, 0x6d, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
+	0x05, 0x2e, 0x47, 0x61, 0x6d, 0x65, 0x22, 0x00, 0x12, 0x51, 0x0a, 0x08, 0x46, 0x69, 0x6e, 0x64,
+	0x47, 0x61, 0x6d, 0x65, 0x12, 0x20, 0x2e, 0x67, 0x61, 0x6d, 0x65, 0x5f, 0x63, 0x6f, 0x6c, 0x6c,
+	0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x46, 0x69, 0x6e, 0x64, 0x47, 0x61, 0x6d, 0x65, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x21, 0x2e, 0x67, 0x61, 0x6d, 0x65, 0x5f, 0x63, 0x6f,
+	0x6c, 0x6c, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x46, 0x69, 0x6e, 0x64, 0x47, 0x61, 0x6d,
+	0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x42, 0x11, 0x5a, 0x0f, 0x69,
+	0x6e, 0x74, 0x65, 0x72, 0x6e, 0x61, 0x6c, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x62, 0x06,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -163,23 +203,21 @@ func file_internal_protos_game_collection_proto_rawDescGZIP() []byte {
 	return file_internal_protos_game_collection_proto_rawDescData
 }
 
-var file_internal_protos_game_collection_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_internal_protos_game_collection_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_internal_protos_game_collection_proto_goTypes = []interface{}{
-	(*GetGameRequest)(nil),   // 0: game_collection.GetGameRequest
-	(*SaveOfferRequest)(nil), // 1: game_collection.SaveOfferRequest
-	(*Offer)(nil),            // 2: Offer
+	(*FindGameRequest)(nil),  // 0: game_collection.FindGameRequest
+	(*FindGameResponse)(nil), // 1: game_collection.FindGameResponse
+	(*GetGameRequest)(nil),   // 2: game_collection.GetGameRequest
 	(*Game)(nil),             // 3: Game
 }
 var file_internal_protos_game_collection_proto_depIdxs = []int32{
-	2, // 0: game_collection.SaveOfferRequest.Offer:type_name -> Offer
-	3, // 1: game_collection.GameCollection.SaveGame:input_type -> Game
-	1, // 2: game_collection.GameCollection.SaveOffer:input_type -> game_collection.SaveOfferRequest
-	0, // 3: game_collection.GameCollection.GetGame:input_type -> game_collection.GetGameRequest
-	3, // 4: game_collection.GameCollection.SaveGame:output_type -> Game
-	2, // 5: game_collection.GameCollection.SaveOffer:output_type -> Offer
-	3, // 6: game_collection.GameCollection.GetGame:output_type -> Game
-	4, // [4:7] is the sub-list for method output_type
-	1, // [1:4] is the sub-list for method input_type
+	3, // 0: game_collection.FindGameResponse.Games:type_name -> Game
+	2, // 1: game_collection.GameCollection.GetGame:input_type -> game_collection.GetGameRequest
+	0, // 2: game_collection.GameCollection.FindGame:input_type -> game_collection.FindGameRequest
+	3, // 3: game_collection.GameCollection.GetGame:output_type -> Game
+	1, // 4: game_collection.GameCollection.FindGame:output_type -> game_collection.FindGameResponse
+	3, // [3:5] is the sub-list for method output_type
+	1, // [1:3] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name
 	1, // [1:1] is the sub-list for extension extendee
 	0, // [0:1] is the sub-list for field type_name
@@ -193,7 +231,7 @@ func file_internal_protos_game_collection_proto_init() {
 	file_internal_protos_game_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_internal_protos_game_collection_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetGameRequest); i {
+			switch v := v.(*FindGameRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -205,7 +243,19 @@ func file_internal_protos_game_collection_proto_init() {
 			}
 		}
 		file_internal_protos_game_collection_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SaveOfferRequest); i {
+			switch v := v.(*FindGameResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_internal_protos_game_collection_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetGameRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -223,7 +273,7 @@ func file_internal_protos_game_collection_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_internal_protos_game_collection_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

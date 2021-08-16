@@ -17,14 +17,15 @@ func NewCollectionServer(m *service.GameService) *CollectionServer {
 	}
 }
 
-func (c *CollectionServer) SaveGame(ctx context.Context, game *protos.Game) (*protos.Game, error) {
-	return game, c.m.SaveGame(game)
+func (c *CollectionServer) GetGame(ctx context.Context, r *protos.GetGameRequest) (*protos.Game, error) {
+	return c.m.GetGame(r.GetId())
 }
 
-func (c *CollectionServer) SaveOffer(ctx context.Context, request *protos.SaveOfferRequest) (*protos.Offer, error) {
-	return nil, nil
-}
+func (c *CollectionServer) FindGame(ctx context.Context, r *protos.FindGameRequest) (*protos.FindGameResponse, error) {
+	games, err := c.m.SearchGames(r.GetTitle())
+	if err != nil {
+		return nil, err
+	}
 
-func (c *CollectionServer) GetGame(ctx context.Context, request *protos.GetGameRequest) (*protos.Game, error) {
-	return nil, nil
+	return &protos.FindGameResponse{Games: games}, nil
 }

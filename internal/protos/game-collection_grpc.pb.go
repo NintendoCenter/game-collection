@@ -18,9 +18,8 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type GameCollectionClient interface {
-	SaveGame(ctx context.Context, in *Game, opts ...grpc.CallOption) (*Game, error)
-	SaveOffer(ctx context.Context, in *SaveOfferRequest, opts ...grpc.CallOption) (*Offer, error)
 	GetGame(ctx context.Context, in *GetGameRequest, opts ...grpc.CallOption) (*Game, error)
+	FindGame(ctx context.Context, in *FindGameRequest, opts ...grpc.CallOption) (*FindGameResponse, error)
 }
 
 type gameCollectionClient struct {
@@ -29,24 +28,6 @@ type gameCollectionClient struct {
 
 func NewGameCollectionClient(cc grpc.ClientConnInterface) GameCollectionClient {
 	return &gameCollectionClient{cc}
-}
-
-func (c *gameCollectionClient) SaveGame(ctx context.Context, in *Game, opts ...grpc.CallOption) (*Game, error) {
-	out := new(Game)
-	err := c.cc.Invoke(ctx, "/game_collection.GameCollection/SaveGame", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *gameCollectionClient) SaveOffer(ctx context.Context, in *SaveOfferRequest, opts ...grpc.CallOption) (*Offer, error) {
-	out := new(Offer)
-	err := c.cc.Invoke(ctx, "/game_collection.GameCollection/SaveOffer", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
 }
 
 func (c *gameCollectionClient) GetGame(ctx context.Context, in *GetGameRequest, opts ...grpc.CallOption) (*Game, error) {
@@ -58,27 +39,32 @@ func (c *gameCollectionClient) GetGame(ctx context.Context, in *GetGameRequest, 
 	return out, nil
 }
 
+func (c *gameCollectionClient) FindGame(ctx context.Context, in *FindGameRequest, opts ...grpc.CallOption) (*FindGameResponse, error) {
+	out := new(FindGameResponse)
+	err := c.cc.Invoke(ctx, "/game_collection.GameCollection/FindGame", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // GameCollectionServer is the server API for GameCollection service.
 // All implementations should embed UnimplementedGameCollectionServer
 // for forward compatibility
 type GameCollectionServer interface {
-	SaveGame(context.Context, *Game) (*Game, error)
-	SaveOffer(context.Context, *SaveOfferRequest) (*Offer, error)
 	GetGame(context.Context, *GetGameRequest) (*Game, error)
+	FindGame(context.Context, *FindGameRequest) (*FindGameResponse, error)
 }
 
 // UnimplementedGameCollectionServer should be embedded to have forward compatible implementations.
 type UnimplementedGameCollectionServer struct {
 }
 
-func (UnimplementedGameCollectionServer) SaveGame(context.Context, *Game) (*Game, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SaveGame not implemented")
-}
-func (UnimplementedGameCollectionServer) SaveOffer(context.Context, *SaveOfferRequest) (*Offer, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SaveOffer not implemented")
-}
 func (UnimplementedGameCollectionServer) GetGame(context.Context, *GetGameRequest) (*Game, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetGame not implemented")
+}
+func (UnimplementedGameCollectionServer) FindGame(context.Context, *FindGameRequest) (*FindGameResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindGame not implemented")
 }
 
 // UnsafeGameCollectionServer may be embedded to opt out of forward compatibility for this service.
@@ -90,42 +76,6 @@ type UnsafeGameCollectionServer interface {
 
 func RegisterGameCollectionServer(s grpc.ServiceRegistrar, srv GameCollectionServer) {
 	s.RegisterService(&GameCollection_ServiceDesc, srv)
-}
-
-func _GameCollection_SaveGame_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Game)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(GameCollectionServer).SaveGame(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/game_collection.GameCollection/SaveGame",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GameCollectionServer).SaveGame(ctx, req.(*Game))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _GameCollection_SaveOffer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SaveOfferRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(GameCollectionServer).SaveOffer(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/game_collection.GameCollection/SaveOffer",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GameCollectionServer).SaveOffer(ctx, req.(*SaveOfferRequest))
-	}
-	return interceptor(ctx, in, info, handler)
 }
 
 func _GameCollection_GetGame_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -146,6 +96,24 @@ func _GameCollection_GetGame_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _GameCollection_FindGame_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FindGameRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GameCollectionServer).FindGame(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/game_collection.GameCollection/FindGame",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GameCollectionServer).FindGame(ctx, req.(*FindGameRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // GameCollection_ServiceDesc is the grpc.ServiceDesc for GameCollection service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -154,16 +122,12 @@ var GameCollection_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*GameCollectionServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SaveGame",
-			Handler:    _GameCollection_SaveGame_Handler,
-		},
-		{
-			MethodName: "SaveOffer",
-			Handler:    _GameCollection_SaveOffer_Handler,
-		},
-		{
 			MethodName: "GetGame",
 			Handler:    _GameCollection_GetGame_Handler,
+		},
+		{
+			MethodName: "FindGame",
+			Handler:    _GameCollection_FindGame_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

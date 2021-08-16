@@ -7,16 +7,18 @@ package game_collection;
 import "internal/protos/game.proto";
 
 service GameCollection {
-  rpc SaveGame(Game) returns (Game) {}
-  rpc SaveOffer(SaveOfferRequest) returns (Offer) {}
   rpc GetGame(GetGameRequest) returns (Game) {}
+  rpc FindGame(FindGameRequest) returns (FindGameResponse) {}
+}
+
+message FindGameRequest {
+  string Title = 1;
+}
+
+message FindGameResponse {
+  repeated Game Games = 1;
 }
 
 message GetGameRequest {
   string Id = 1;
-}
-
-message SaveOfferRequest {
-  string GameId = 1;
-  Offer Offer = 2;
 }

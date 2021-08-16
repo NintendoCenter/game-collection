@@ -36,16 +36,21 @@ func NewGameManager(db *mgo.Database) (*GameManager, error) {
 }
 
 func (m *GameManager) SaveGame(game *protos.Game) error {
+	m.mu.Lock()
+	defer m.mu.Unlock()
 	return m.collection.Insert(game)
 }
 
 func (m *GameManager) UpdateGame(id string, game *protos.Game) error {
 	offerMap := make(map[protos.Shop]*protos.Offer, len(game.Offers))
+
+	m.mu.RLock()
 	if existed, _ := m.Find(id); existed != nil {
 		for _, offer := range existed.Offers {
 			offerMap[offer.Shop] = offer
 		}
 	}
+	m.mu.RUnlock()
 
 	for _, offer := range game.Offers {
 		offerMap[offer.Shop] = offer
@@ -56,13 +61,28 @@ func (m *GameManager) UpdateGame(id string, game *protos.Game) error {
 		game.Offers = append(game.Offers, offer)
 	}
 
+	m.mu.Lock()
+	defer m.mu.Unlock()
 	return m.collection.Update(bson.M{"id": id}, game)
 }
 
 func (m *GameManager) Find(id string) (*protos.Game, error) {
 	var game protos.Game
+	m.mu.RLock()
+	defer m.mu.RUnlock()
 	if err := m.collection.Find(bson.M{"id": id}).One(&game); err != nil {
 		return nil, err
 	}
 	return &game, nil
+}
+
+func (m *GameManager) SearchByName(name string) (result []*protos.Game, err error) {
+	m.mu.RLock()
+	defer m.mu.RUnlock()
+	err = m.collection.Find(bson.M{"title": bson.RegEx{Pattern: name, Options: "i"}}).All(&result)
+	if err != nil {
+		return
+	}
+
+	return
 }

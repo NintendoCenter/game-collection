@@ -5,6 +5,7 @@ go 1.16
 
 require (
 	github.com/caarlos0/env v3.5.0+incompatible // indirect
+	github.com/elastic/go-elasticsearch/v8 v8.0.0-20210816151606-29b887899304 // indirect
 	github.com/globalsign/mgo v0.0.0-20181015135952-eeefdecb41b8 // indirect
 	github.com/nsqio/go-nsq v1.0.8 // indirect
 	go.uber.org/dig v1.12.0 // indirect
