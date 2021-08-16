@@ -8,10 +8,10 @@ import (
 )
 
 type CollectionServer struct {
-	m *service.GameManager
+	m *service.GameService
 }
 
-func NewCollectionServer(m *service.GameManager) *CollectionServer {
+func NewCollectionServer(m *service.GameService) *CollectionServer {
 	return &CollectionServer{
 		m: m,
 	}

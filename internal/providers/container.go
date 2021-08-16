@@ -1,16 +1,19 @@
-package main
+package providers
 
 import (
 	"NintendoCenter/game-collection/config"
 	"NintendoCenter/game-collection/internal/infrastructure"
+	"NintendoCenter/game-collection/internal/manager"
 	"NintendoCenter/game-collection/internal/providers/grpc_server"
 	"NintendoCenter/game-collection/internal/providers/logger"
+	"NintendoCenter/game-collection/internal/providers/mongo"
 	"NintendoCenter/game-collection/internal/service"
+	"github.com/globalsign/mgo"
 	"go.uber.org/dig"
 	"go.uber.org/zap"
 )
 
-func buildContainer() (*dig.Container, error) {
+func BuildContainer() (*dig.Container, error) {
 	container := dig.New()
 
 	constructors := []interface{}{
@@ -20,11 +23,17 @@ func buildContainer() (*dig.Container, error) {
 		func (i *infrastructure.CollectionServer, cfg *config.Config) (*grpc_server.GrpcServer, error) {
 			return grpc_server.New(i, cfg)
 		},
-		func (l *zap.Logger) *service.GameManager {
-			return service.NewGameManager(l)
+		func (l *zap.Logger) *service.GameService {
+			return service.NewGameService(l)
 		},
-		func (m *service.GameManager) *infrastructure.CollectionServer {
+		func (m *service.GameService) *infrastructure.CollectionServer {
 			return infrastructure.NewCollectionServer(m)
+		},
+		func (cfg *config.Config) (*mgo.Database, error) {
+			return mongo.New(cfg.MongoConnection)
+		},
+		func (db *mgo.Database) (*manager.GameManager, error) {
+			return manager.NewGameManager(db)
 		},
 		config.NewConfig,
 	}

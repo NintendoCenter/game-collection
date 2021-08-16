@@ -1,22 +1,23 @@
 package service
 
 import (
-	"fmt"
-
+	"NintendoCenter/game-collection/internal/manager"
 	"NintendoCenter/game-collection/internal/protos"
 	"go.uber.org/zap"
 )
 
-type GameManager struct {
-	l *zap.Logger
-	// TODO: mgo
+type GameService struct {
+	l       *zap.Logger
+	manager *manager.GameManager
 }
 
-func NewGameManager(logger *zap.Logger) *GameManager {
-	return &GameManager{l: logger}
+func NewGameService(logger *zap.Logger, manager *manager.GameManager) *GameService {
+	return &GameService{l: logger, manager: manager}
 }
 
-func (m *GameManager) SaveGame(game *protos.Game) error {
-	m.l.Info(fmt.Sprintf("Got game '%s' for saving", game.Title))
-	return nil
+func (m *GameService) SaveGame(game *protos.Game) error {
+	if existed, _ := m.manager.Find(game.Id); existed != nil {
+		return m.manager.UpdateGame(game.Id, game)
+	}
+	return m.manager.SaveGame(game)
 }

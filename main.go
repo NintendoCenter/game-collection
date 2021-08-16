@@ -5,13 +5,14 @@ import (
 
 	"NintendoCenter/game-collection/config"
 	"NintendoCenter/game-collection/internal/infrastructure"
+	"NintendoCenter/game-collection/internal/providers"
 	"NintendoCenter/game-collection/internal/providers/grpc_server"
 	"go.uber.org/zap"
 )
 
 func main() {
 	t1, _ := zap.NewProduction()
-	container, err := buildContainer()
+	container, err := providers.BuildContainer()
 	if err != nil {
 		t1.Fatal("cannot build dependencies", zap.Error(err))
 	}

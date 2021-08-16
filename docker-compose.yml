@@ -32,7 +32,7 @@ services:
     command: /nsqlookupd
     ports:
       - 4160
-      - 4161
+      - 4161:4161
 
   nc_nsqd:
     container_name: nc_nsqd
@@ -41,8 +41,17 @@ services:
     depends_on:
       - nc_nsq_lookupd
     ports:
-      - 4150
-      - 4151
+      - 4150:4150
+      - 4151:4151
+
+  nc_nsq_admin:
+    container_name: nc_nsq_admin
+    image: nsqio/nsq
+    command: /nsqadmin --lookupd-http-address=nc_nsq_lookupd:4161
+    depends_on:
+      - nc_nsq_lookupd
+    ports:
+      - 4171:4171
 
   nc_elastic:
     container_name: nc_elastic
@@ -54,7 +63,7 @@ services:
     volumes:
       - elastic_data:/usr/share/elasticsearch/data
     ports:
-      - 9200
+      - 9200:9200
 
 volumes:
   mongo_data:
