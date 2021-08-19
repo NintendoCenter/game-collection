@@ -7,7 +7,7 @@ services:
       args:
         GRPC_PORT: ${GRPC_PORT}
       context: .
-      dockerfile: Dockerfile
+      dockerfile: _Dockerfile.dev
     depends_on:
       - nc_mongo
       - nc_elastic

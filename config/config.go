@@ -16,5 +16,3 @@ func NewConfig() (*Config, error) {
 	cfg := new(Config)
 	return cfg, env.Parse(cfg)
 }
-
-//mongodb+srv://nc:qD96e254ngrFm837@private-nc-mongo-ce37f85a.mongo.ondigitalocean.com/admin?authSource=admin
