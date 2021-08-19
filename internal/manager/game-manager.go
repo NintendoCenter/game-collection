@@ -1,6 +1,7 @@
 package manager
 
 import (
+	"context"
 	"sync"
 
 	"NintendoCenter/game-collection/internal/protos"
@@ -76,10 +77,11 @@ func (m *GameManager) Find(id string) (*protos.Game, error) {
 	return &game, nil
 }
 
-func (m *GameManager) SearchByName(name string) (result []*protos.Game, err error) {
+func (m *GameManager) SearchGames(ctx context.Context, filter *protos.FindGameRequest) (result []*protos.Game, err error) {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
-	err = m.collection.Find(bson.M{"title": bson.RegEx{Pattern: name, Options: "i"}}).All(&result)
+	query := bson.M{"title": bson.RegEx{Pattern: filter.Title, Options: "i"}}
+	err = m.collection.Find(query).All(&result)
 	if err != nil {
 		return
 	}

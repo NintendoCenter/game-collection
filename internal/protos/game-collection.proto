@@ -13,6 +13,8 @@ service GameCollection {
 
 message FindGameRequest {
   string Title = 1;
+  bool OnlyDigital = 2;
+  bool OnlyNew = 3;
 }
 
 message FindGameResponse {

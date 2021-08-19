@@ -1,6 +1,7 @@
 package consumer
 
 import (
+	"context"
 	"encoding/json"
 
 	"NintendoCenter/game-collection/internal/protos"
@@ -14,6 +15,7 @@ type GameConsumer struct {
 	consumer *nsq.Consumer
 	logger *zap.Logger
 	address string
+	ctx *context.Context
 }
 
 const DefaultChannel = "default"
@@ -36,7 +38,8 @@ func NewGameConsumer(topic string, queueAddress string, service *service.GameSer
 	return gameConsumer, nil
 }
 
-func (c *GameConsumer) Start() error {
+func (c *GameConsumer) Start(ctx context.Context) error {
+	c.ctx = &ctx
 	return c.consumer.ConnectToNSQD(c.address)
 }
 
@@ -55,5 +58,5 @@ func (c *GameConsumer) HandleMessage(m *nsq.Message) error {
 		return err
 	}
 
-	return c.service.SaveGame(&game)
+	return c.service.SaveGame(*c.ctx, &game)
 }

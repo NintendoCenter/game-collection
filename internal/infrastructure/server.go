@@ -18,11 +18,11 @@ func NewCollectionServer(m *service.GameService) *CollectionServer {
 }
 
 func (c *CollectionServer) GetGame(ctx context.Context, r *protos.GetGameRequest) (*protos.Game, error) {
-	return c.m.GetGame(r.GetId())
+	return c.m.GetGame(ctx, r.GetId())
 }
 
 func (c *CollectionServer) FindGame(ctx context.Context, r *protos.FindGameRequest) (*protos.FindGameResponse, error) {
-	games, err := c.m.SearchGames(r.GetTitle())
+	games, err := c.m.SearchGames(ctx, r)
 	if err != nil {
 		return nil, err
 	}

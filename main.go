@@ -28,7 +28,7 @@ func main() {
 		defer c.Stop()
 		defer s.Stop()
 		gr.Go(func() error {
-			if err := c.Start(); err != nil {
+			if err := c.Start(ctx); err != nil {
 				logger.Fatal("error on starting consumer")
 				return err
 			}
