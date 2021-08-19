@@ -4,6 +4,8 @@ services:
   game_collection:
     container_name: nc_game_collection
     build:
+      args:
+        GRPC_PORT: ${GRPC_PORT}
       context: .
       dockerfile: Dockerfile
     depends_on:

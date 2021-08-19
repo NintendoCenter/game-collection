@@ -1,20 +1,13 @@
-FROM golang:1.16 as builder
-
-RUN go get github.com/go-delve/delve/cmd/dlv
-
-ARG PROXY=
-ARG SERVICE_PATH="."
-WORKDIR /usr/src
-COPY go.mod .
-COPY go.sum .
-RUN GOPROXY=${PROXY} go mod download
+ARG GRPC_PORT
+FROM golang:alpine AS build
+RUN apk --no-cache add gcc g++ make git
+WORKDIR /go/src/app
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -a -gcflags="all=-N -l" -installsuffix cgo -o service ./${SERVICE_PATH}
+RUN GOOS=linux go build -ldflags="-s -w" -o ./bin/service ./main.go
 
-FROM alpine:latest
-RUN apk add --no-cache ca-certificates libc6-compat tzdata
-
-WORKDIR /usr/app
-COPY --from=builder /go/bin/dlv .
-COPY --from=builder /usr/src/service .
-CMD ["./dlv", "--listen=:40000", "--headless", "--continue", "--api-version=2", "--accept-multiclient", "exec", "./service"]
+FROM alpine:3.13
+RUN apk --no-cache add ca-certificates
+WORKDIR /usr/bin
+COPY --from=build /go/src/app/bin /go/bin
+EXPOSE ${GRPC_PORT}
+ENTRYPOINT /go/bin/service --port ${GRPC_PORT}
