@@ -28,15 +28,3 @@ jobs:
 
       - name: Push image to the registry
         run: docker push registry.digitalocean.com/nintendo-center-registry/game-collection:$(echo $GITHUB_SHA | head -c7)
-
-      - name: Update deployment file
-        run: TAG=$(echo $GITHUB_SHA | head -c7) && sed -i 's|<IMAGE>|registry.digitalocean.com/nintendo-center-registry/game-collection:'${TAG}'|' $GITHUB_WORKSPACE/.github/deployment.yml
-
-      - name: Save DigitalOcean kubeconfig with short-lived credentials
-        run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 nc-k8s
-
-      - name: Deploy to DigitalOcean Kubernetes
-        run: kubectl apply -f $GITHUB_WORKSPACE/.github/deployment.yml
-
-      - name: Verify deployment
-        run: kubectl rollout status deployment/game-collection --timeout 10s

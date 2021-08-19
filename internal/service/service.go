@@ -19,8 +19,8 @@ type GameService struct {
 	esManager *manager.ElasticManager
 }
 
-func NewGameService(logger *zap.Logger, manager *manager.GameManager, esManager *manager.ElasticManager) *GameService {
-	return &GameService{l: logger, manager: manager, esManager: esManager}
+func NewGameService(logger *zap.Logger, manager *manager.GameManager) *GameService {
+	return &GameService{l: logger, manager: manager}
 }
 
 func (m *GameService) SaveGame(ctx context.Context, game *protos.Game) error {
@@ -37,7 +37,11 @@ func (m *GameService) SaveGame(ctx context.Context, game *protos.Game) error {
 		return err
 	}
 
-	return m.esManager.IndexGame(ctx, game)
+	if m.esManager != nil {
+		return m.esManager.IndexGame(ctx, game)
+	}
+
+	return nil
 }
 
 func (m *GameService) SearchGames(ctx context.Context, filter *protos.FindGameRequest) ([]*protos.Game, error) {
