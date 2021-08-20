@@ -5,30 +5,19 @@ import (
 	"sync"
 
 	"NintendoCenter/game-collection/internal/protos"
-	"github.com/globalsign/mgo"
 	"github.com/globalsign/mgo/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type GameManager struct {
-	collection *mgo.Collection
+	collection *mongo.Collection
 	mu         sync.RWMutex
 }
 
 const collectionName = "games"
 
-func NewGameManager(db *mgo.Database) (*GameManager, error) {
-	collection := db.C(collectionName)
-	idxTable := mgo.Index{
-		Key:        []string{"title"},
-		Unique:     false,
-		DropDups:   true,
-		Background: true,
-		Sparse:     true,
-	}
-
-	if err := collection.EnsureIndex(idxTable); err != nil {
-		return nil, err
-	}
+func NewGameManager(db *mongo.Database) (*GameManager, error) {
+	collection := db.Collection(collectionName)
 
 	return &GameManager{
 		collection: collection,
@@ -36,17 +25,18 @@ func NewGameManager(db *mgo.Database) (*GameManager, error) {
 	}, nil
 }
 
-func (m *GameManager) SaveGame(game *protos.Game) error {
+func (m *GameManager) SaveGame(ctx context.Context, game *protos.Game) error {
 	m.mu.Lock()
 	defer m.mu.Unlock()
-	return m.collection.Insert(game)
+	_, err := m.collection.InsertOne(ctx, game)
+	return err
 }
 
-func (m *GameManager) UpdateGame(id string, game *protos.Game) error {
+func (m *GameManager) UpdateGame(ctx context.Context, id string, game *protos.Game) error {
 	offerMap := make(map[protos.Shop]*protos.Offer, len(game.Offers))
 
 	m.mu.RLock()
-	if existed, _ := m.Find(id); existed != nil {
+	if existed, _ := m.Find(ctx, id); existed != nil {
 		for _, offer := range existed.Offers {
 			offerMap[offer.Shop] = offer
 		}
@@ -64,14 +54,15 @@ func (m *GameManager) UpdateGame(id string, game *protos.Game) error {
 
 	m.mu.Lock()
 	defer m.mu.Unlock()
-	return m.collection.Update(bson.M{"id": id}, game)
+	_, err := m.collection.UpdateOne(ctx, bson.M{"id": id}, game)
+	return err
 }
 
-func (m *GameManager) Find(id string) (*protos.Game, error) {
+func (m *GameManager) Find(ctx context.Context, id string) (*protos.Game, error) {
 	var game protos.Game
 	m.mu.RLock()
 	defer m.mu.RUnlock()
-	if err := m.collection.Find(bson.M{"id": id}).One(&game); err != nil {
+	if err := m.collection.FindOne(ctx, bson.M{"id": id}).Decode(&game); err != nil {
 		return nil, err
 	}
 	return &game, nil
@@ -81,10 +72,10 @@ func (m *GameManager) SearchGames(ctx context.Context, filter *protos.FindGameRe
 	m.mu.RLock()
 	defer m.mu.RUnlock()
 	query := bson.M{"title": bson.RegEx{Pattern: filter.Title, Options: "i"}}
-	err = m.collection.Find(query).All(&result)
+	cursor, err := m.collection.Find(ctx, query)
 	if err != nil {
 		return
 	}
-
+	err = cursor.All(ctx, result)
 	return
 }

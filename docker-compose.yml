@@ -4,8 +4,6 @@ services:
   game_collection:
     container_name: nc_game_collection
     build:
-      args:
-        GRPC_PORT: ${GRPC_PORT}
       context: .
       dockerfile: _Dockerfile.dev
     depends_on:
@@ -14,14 +12,14 @@ services:
       - nc_nsqd
     restart: unless-stopped
     environment:
-      MONGO_CONNECTION: mongodb://mongo:27017/partendo
+      DATABASE_URL: mongodb://mongo:27017/partendo
       INTERVAL: 2
       WORKERS: 2
       ITEM_LIMIT: 40
 
   nc_mongo:
     container_name: nc_mongo
-    image: mongo:3.6.5
+    image: mongo
     ports:
       - 27017:27017
     restart: unless-stopped

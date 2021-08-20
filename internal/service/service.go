@@ -25,12 +25,12 @@ func NewGameService(logger *zap.Logger, manager *manager.GameManager) *GameServi
 
 func (m *GameService) SaveGame(ctx context.Context, game *protos.Game) error {
 	var err error
-	if existed, _ := m.manager.Find(game.Id); existed != nil {
+	if existed, _ := m.manager.Find(ctx, game.Id); existed != nil {
 		m.l.Info(fmt.Sprintf("game '%s' updated", game.Title))
-		err = m.manager.UpdateGame(game.Id, game)
+		err = m.manager.UpdateGame(ctx, game.Id, game)
 	} else {
 		m.l.Info(fmt.Sprintf("game '%s' saved", game.Title))
-		err = m.manager.SaveGame(game)
+		err = m.manager.SaveGame(ctx, game)
 	}
 
 	if err != nil {
@@ -48,6 +48,6 @@ func (m *GameService) SearchGames(ctx context.Context, filter *protos.FindGameRe
 	return m.manager.SearchGames(ctx, filter)
 }
 
-func (m *GameService) GetGame(_ context.Context, id string) (*protos.Game, error) {
-	return m.manager.Find(id)
+func (m *GameService) GetGame(ctx context.Context, id string) (*protos.Game, error) {
+	return m.manager.Find(ctx, id)
 }

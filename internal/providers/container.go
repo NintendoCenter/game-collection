@@ -6,10 +6,10 @@ import (
 	"NintendoCenter/game-collection/internal/manager"
 	"NintendoCenter/game-collection/internal/providers/grpc_server"
 	"NintendoCenter/game-collection/internal/providers/logger"
-	"NintendoCenter/game-collection/internal/providers/mongo"
+	mongoProvider "NintendoCenter/game-collection/internal/providers/mongo"
 	"NintendoCenter/game-collection/internal/queue/consumer"
 	"NintendoCenter/game-collection/internal/service"
-	"github.com/globalsign/mgo"
+	"go.mongodb.org/mongo-driver/mongo"
 	"go.uber.org/dig"
 	"go.uber.org/zap"
 )
@@ -24,6 +24,9 @@ func BuildContainer() (*dig.Container, error) {
 		func (i *infrastructure.CollectionServer, cfg *config.Config) (*grpc_server.GrpcServer, error) {
 			return grpc_server.New(i, cfg)
 		},
+		func (cfg *config.Config) (*mongo.Database, error) {
+			return mongoProvider.NewClient(cfg.MongoConnection)
+		},
 		//func (cfg *config.Config) (*elastic.Client, error) {
 		//	return elastic2.NewElasticClient(cfg.ElasticAdds)
 		//},
@@ -36,10 +39,7 @@ func BuildContainer() (*dig.Container, error) {
 		func (m *service.GameService) *infrastructure.CollectionServer {
 			return infrastructure.NewCollectionServer(m)
 		},
-		func (cfg *config.Config) (*mgo.Database, error) {
-			return mongo.New(cfg.MongoConnection)
-		},
-		func (db *mgo.Database) (*manager.GameManager, error) {
+		func (db *mongo.Database) (*manager.GameManager, error) {
 			return manager.NewGameManager(db)
 		},
 		func (s *service.GameService, cfg *config.Config, l *zap.Logger) (*consumer.GameConsumer, error) {
